@@ -117,8 +117,8 @@ Results on the development machine (Windows 11, CPython 3.12.5; absolute times v
 
 | Method | Time at n = 100,000 | Fitted k | Theory |
 |--------|--------------------:|---------:|-------:|
-| Fast doubling | **1.73 ms** | **1.641 ± 0.013** | 1.585 (Karatsuba) |
-| Naive recurrence | **339 ms** | **1.931 ± 0.008** | 2 |
+| Fast doubling | **1.73 ms** | **1.634 ± 0.012** | 1.585 (Karatsuba) |
+| Naive recurrence | **340 ms** | **1.905 ± 0.007** | 2 |
 
 At n = 100,000 fast doubling is about 200× faster, and the gap grows with n.
 
@@ -127,7 +127,7 @@ curve flattens it against zero) and `plots/sequence_loglog.png` (log-log with th
 
 ### Why the fitted exponents differ from theory
 
-- **Fast doubling (1.64 vs 1.585).** O(b^1.585) is an asymptotic bound. CPython uses Karatsuba only for
+- **Fast doubling (1.63 vs 1.585).** O(b^1.585) is an asymptotic bound. CPython uses Karatsuba only for
   operands above roughly 70 internal digits (~2,100 bits). Below that cutoff it uses O(b²) schoolbook
   multiplication. In the tested range the largest operands are ~70,000 bits, so the Karatsuba recursion
   is only a few levels deep before it reaches quadratic base cases. That makes the effective exponent a
@@ -135,7 +135,7 @@ curve flattens it against zero) and `plots/sequence_loglog.png` (log-log with th
   on the larger operands add a little more. The jitter near n ≈ 90,000–100,000 is within run-to-run noise
   at these millisecond timings. The cost may also not be perfectly smooth in n, because Karatsuba splits
   numbers at different points depending on their exact size.
-- **Naive (1.93 vs 2).** Each iteration also pays a fixed interpreter cost (loop bookkeeping, tuple
+- **Naive (1.91 vs 2).** Each iteration also pays a fixed interpreter cost (loop bookkeeping, tuple
   packing, allocating the new int object). That is an O(n) term added to the O(n²) arithmetic, and it
   pulls the fitted exponent slightly below 2, mostly through the smaller n values in the fit range.
 
