@@ -138,10 +138,10 @@ class PowerLawFit:
 
 
 def validate_index(n: int) -> None:
-    """Raise ValueError unless n is a non-negative int."""
+    """Raise TypeError if n is not an int (bool included), ValueError if n < 0."""
     # bool is a subclass of int, but True/False are not meaningful indices.
     if not isinstance(n, int) or isinstance(n, bool):
-        raise ValueError(f"n must be an int, got {type(n).__name__}")
+        raise TypeError(f"n must be an int, got {type(n).__name__}")
     if n < 0:
         raise ValueError(f"n must be non-negative, got {n}")
 
